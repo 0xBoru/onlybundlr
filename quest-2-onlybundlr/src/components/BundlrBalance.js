@@ -29,7 +29,7 @@ const BundlrBalance = () => {
 	};
 
 	return (
-		<div className="w-[800px] mt-1 flex flex-col  bg-newblack px-1 py-1 rounded-lg ">
+		<div className="w-full mt-1 flex flex-col  bg-newblack px-1 py-1 rounded-lg ">
 			<label className="font-main block uppercase text-xs text-background font-bold mb-2">
 				Bundlr Node Balance: {curBalance}
 			</label>

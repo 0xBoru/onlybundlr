@@ -3,7 +3,7 @@ import React from "react";
 const Publication = ({ id, content, description, media, publisher }) => {
 	return (
 		<div
-			className="w-[800px] flex flex-col justify-center bg-newblack my-8 bg-slate-300 px-3 py-3 rounded-xl"
+			className="w-full flex flex-col justify-center bg-newblack my-8 bg-slate-300 px-3 py-3 rounded-xl"
 			key={id}
 		>
 			<div className="flex flex-row bg-secondary rounded-xl">

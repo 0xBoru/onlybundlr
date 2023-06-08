@@ -47,7 +47,7 @@ const EditProfilePicture = ({ profile }) => {
 	};
 
 	return (
-		<div className="w-[800px] mt-10 flex flex-col  bg-primary px-1 py-1 rounded-lg mb-10">
+		<div className="w-full mt-10 flex flex-col  bg-primary px-1 py-1 rounded-lg mb-10">
 			<label className="font-main block uppercase text-xs font-bold mb-2">Profile Picture</label>
 			{profile?.picture && !fileToUpload && (
 				<img width="800" src={profile.picture?.original.url} alt="profile_pic" />

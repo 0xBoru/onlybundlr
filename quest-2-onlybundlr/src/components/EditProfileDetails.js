@@ -128,7 +128,7 @@ const EditProfileDetails = ({ profile }) => {
 	};
 
 	return (
-		<div className="w-[800px] mt-2 flex flex-col bg-newblack px-1 py-1 rounded-lg">
+		<div className="w-full mt-2 flex flex-col bg-newblack px-1 py-1 rounded-lg">
 			<div className="ml-2">
 				<label className="font-main block uppercase text-xs text-background font-bold mb-2">Personal Information</label>
 				<label className="font-main block uppercase tracking-wide text-background text-xs font-bold mb-2">
