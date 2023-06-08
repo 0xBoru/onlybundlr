@@ -18,6 +18,7 @@ module.exports = {
 			contast: "#403F3E",
 			message: "#f50505",
 			Default: "#FEF4EE",
+			Another: "FEF4EE",
 		},
 		extend: {},
 	},
