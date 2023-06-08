@@ -19,6 +19,7 @@ module.exports = {
 			message: "#f50505",
 			Default: "#FEF4EE",
 			Another: "FEF4EE",
+			onemore: "FEF4EE",
 		},
 		extend: {},
 	},
