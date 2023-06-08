@@ -16,17 +16,26 @@ const BundlrBalance = () => {
 
 	// Called when the "fund" button is clicked by the user
 	const doFund = async () => {
-		// BUILDOOOORS: Complete this
+		if (!fundAmount) {
+			setMessage("Please specify an amount to fund");
+			return;
+		}
+
+		setMessage(`Funding ${fundAmount} MATIC`);
+		const fundStatus = await fundNode(fundAmount);
+		setMessage(fundStatus);
+		setCurBalance(await getBalanceMatic());
+		setFundAmount(0);
 	};
 
 	return (
-		<div className="w-[600px] mt-1 flex flex-col  bg-primary px-1 py-1 rounded-lg ">
-			<label className="font-main block uppercase text-xs font-bold mb-2">
+		<div className="w-[800px] mt-1 flex flex-col  bg-newblack px-1 py-1 rounded-lg ">
+			<label className="font-main block uppercase text-xs text-background font-bold mb-2">
 				Bundlr Node Balance: {curBalance}
 			</label>
 
 			<div className="flex flex-row justify-items-center">
-				<label className="font-main block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+				<label className="font-main block uppercase tracking-wide text-gray-700 text-xs text-background font-bold mb-2">
 					Amount To Fund
 				</label>
 				<input

@@ -3,13 +3,18 @@ module.exports = {
 	content: ["./src/**/*.{js,jsx,ts,tsx}"],
 	theme: {
 		fontFamily: {
-			main: ["Roboto"],
+			main: ["Chalkduster"],
 			logo: ["Source Sans Pro"],
 		},
 		colors: {
 			background: "#FEF4EE",
 			primary: "#D3D9EF",
 			secondary: "#DBDEE9",
+			newwhite: "#ffffff",
+			red: "#CC0000",
+			orange: "#E25A1A",
+			yellow: "#DFAB41",
+			newblack: "#000000",
 			contast: "#403F3E",
 			message: "#f50505",
 		},

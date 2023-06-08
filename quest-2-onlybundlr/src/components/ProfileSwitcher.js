@@ -1,32 +1,53 @@
 import React, { useState, useEffect } from "react";
-
-import { useActiveProfile, useCreateProfile, useProfilesOwnedByMe, useActiveProfileSwitch } from "@lens-protocol/react";
-
+ 
+import {
+	useActiveProfile,
+	useCreateProfile,
+	useProfilesOwnedByMe,
+	useActiveProfileSwitch,
+} from "@lens-protocol/react";
+ 
 const ProfileSwitcher = ({ showCreateNew }) => {
 	const [message, setMessage] = useState("");
 	const [txActive, setTxActive] = useState(false);
 	const [createProfileMode, setCreateProfileMode] = useState(false);
 	const [newProfileHandle, setNewProfileHandle] = useState("");
-	const { data: profiles, loading: profilesLoading, hasMore, next } = useProfilesOwnedByMe();
+	const {
+		data: profiles,
+		loading: profilesLoading,
+		hasMore,
+		next,
+	} = useProfilesOwnedByMe();
 	const { data: activeProfile, loading: activeProfileLoading } = useActiveProfile();
 	const { execute: switchProfile, isPending } = useActiveProfileSwitch();
-
+ 
 	const {
 		execute: createNewProfile,
 		error: createNewProfileError,
 		isPending: createNewProfilePending,
 	} = useCreateProfile();
-
+ 
 	// Called when the user clicks "save new profile"
 	const doCreateProfile = async () => {
-		// BUILDOOOORS: Complete this
+		setMessage("");
+		setTxActive(true);
+		try {
+			setMessage("Creating profile ...");
+			const tx = await createNewProfile(newProfileHandle);
+			setMessage("Profile created.");
+		} catch (e) {
+			setMessage("Error creating profile " + e);
+			console.log("Error on create profile ", e);
+		}
+		setTxActive(false);
+		setCreateProfileMode(false);
 	};
-
+ 
 	useEffect(() => {
 		if (!profiles || profiles.length === 0) setCreateProfileMode(true);
 		else setCreateProfileMode(false);
 	}, [profilesLoading]);
-
+ 
 	return (
 		<div className="w-fit mt-2 flex flex-col bg-primary px-1 py-1 rounded-lg">
 			<div className="flex flex-col  w-full">
@@ -43,7 +64,12 @@ const ProfileSwitcher = ({ showCreateNew }) => {
 							>
 								{profiles &&
 									profiles
-										?.filter((a, i) => profiles?.findIndex((s) => a.id === s.id) === i)
+										?.filter(
+											(a, i) =>
+												profiles?.findIndex(
+													(s) => a.id === s.id,
+												) === i,
+										)
 										.map((profile) => (
 											<option key={profile.id} value={profile.id}>
 												{profile.handle}
@@ -68,7 +94,7 @@ const ProfileSwitcher = ({ showCreateNew }) => {
 								type="text"
 								onChange={(e) => setNewProfileHandle(e.target.value)}
 							/>
-
+ 
 							<button
 								className="ml-10 font-main px-5 text-white rounded-lg bg-background enabled:hover:bg-secondary border border-red-500"
 								disabled={txActive}
@@ -84,5 +110,5 @@ const ProfileSwitcher = ({ showCreateNew }) => {
 		</div>
 	);
 };
-
+ 
 export default ProfileSwitcher;

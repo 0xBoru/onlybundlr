@@ -9,5 +9,8 @@ import { ethers } from "ethers";
  * @returns A reference to a Bundlr object
  */
 export const getBundlr = async () => {
-	// BUILDOOOORS: Complete this
+	const provider = new ethers.providers.Web3Provider(window.ethereum);
+	const bundlr = new WebBundlr("https://devnet.bundlr.network", "matic", provider);
+	await bundlr.ready();
+	return bundlr;
 };

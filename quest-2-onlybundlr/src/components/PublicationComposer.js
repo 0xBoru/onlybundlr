@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { upload } from "../utils/upload";
 import { uploadImage } from "../utils/upload-image";
-import { ContentFocus, CollectPolicyType, ReferencePolicyType, useCreatePost } from "@lens-protocol/react";
+import {
+	ContentFocus,
+	CollectPolicyType,
+	ReferencePolicyType,
+	useCreatePost,
+} from "@lens-protocol/react";
 import ProfileSwitcher from "./ProfileSwitcher";
-
+ 
 const PublicationComposer = ({ publisher }) => {
 	const [message, setMessage] = useState("");
 	const [txActive, setTxActive] = useState(false);
@@ -11,12 +16,12 @@ const PublicationComposer = ({ publisher }) => {
 	const [fileType, setFileType] = useState();
 	const [caption, setCaption] = useState("");
 	const { execute: create, error, isPending } = useCreatePost({ publisher, upload });
-
+ 
 	// Called when the user selects a file to upload
 	const handleFile = async (e) => {
 		const newFiles = e.target.files;
 		if (newFiles.length === 0) return; // should never happen
-
+ 
 		// only accept image/png, image/jpeg
 		if (newFiles[0]["type"] !== "image/png" && newFiles[0]["type"] !== "image/jpeg") {
 			return;
@@ -24,12 +29,61 @@ const PublicationComposer = ({ publisher }) => {
 		setFileToUpload(newFiles[0]);
 		setFileType(newFiles[0]["type"]);
 	};
-
+ 
 	// Called when the user clicks "Post"
 	const createPublication = async () => {
-		// BUILDOOOORS: Complete this
+		setTxActive(true);
+		setMessage("");
+ 
+		if (fileToUpload) {
+			// image post
+			// STEP 1: Upload image
+			setMessage("Uploading image ....");
+			const imageUrl = await uploadImage(fileToUpload, fileType);
+			// STEP 2: Create post
+			setMessage("Creating image publication ....");
+			try {
+				await create({
+					content: caption,
+					contentFocus: ContentFocus.IMAGE,
+					locale: "en",
+					collect: {
+						type: CollectPolicyType.NO_COLLECT,
+					},
+					reference: { type: ReferencePolicyType.FOLLOWERS_ONLY }, // only followers can interact
+					media: [
+						{
+							url: imageUrl,
+							mimeType: fileType,
+						},
+					],
+				});
+				setCaption("");
+				setFileToUpload(null);
+				setFileType("");
+				setMessage("Publication posted.");
+			} catch (e) {
+				setMessage("Error on post " + e);
+			}
+		} else {
+			setMessage("Creating text publication ....");
+			// text post
+			try {
+				await create({
+					content: caption,
+					contentFocus: ContentFocus.TEXT,
+					locale: "en",
+					reference: { type: ReferencePolicyType.FOLLOWERS_ONLY }, // only followers can interact
+				});
+				setCaption("");
+				setMessage("Publication posted.");
+			} catch (e) {
+				setMessage("Error on post " + e);
+			}
+		}
+		setTxActive(false);
 	};
-
+ 
 	return (
 		<div className="mt-5 flex flex-wrap flex-col pb-10">
 			<ProfileSwitcher showCreateNew={false} />
@@ -38,7 +92,12 @@ const PublicationComposer = ({ publisher }) => {
 					Choose a photo and click post.
 				</label>
 				<div className="px-2 py-2 text-sm text-white rounded-lg bg-secondary">
-					{fileToUpload && <img src={URL.createObjectURL(fileToUpload)} alt="preview of publication image" />}
+					{fileToUpload && (
+						<img
+							src={URL.createObjectURL(fileToUpload)}
+							alt="preview of publication image"
+						/>
+					)}
 					<input
 						className={fileToUpload ? "mt-2" : ""}
 						type="file"
@@ -57,20 +116,20 @@ const PublicationComposer = ({ publisher }) => {
 					value={caption || ""}
 					onChange={(e) => setCaption(e.target.value)}
 				/>
-
+ 
 				<div className="flex flex-row justify-end w-full bg-primary pb-2">
 					<span className="font-main text-message mr-5">{message}</span>
 					<button
-						className="font-main px-5 text-white rounded-lg bg-background enabled:hover:bg-secondary border border-red-500"
+						className="font-main px-5 text-main rounded-lg bg-background enabled:hover:bg-secondary border border-red-500"
 						disabled={txActive}
 						onClick={createPublication}
 					>
-						post
+						Post
 					</button>
 				</div>
 			</div>
 		</div>
 	);
 };
-
+ 
 export default PublicationComposer;

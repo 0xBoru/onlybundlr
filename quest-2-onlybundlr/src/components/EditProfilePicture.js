@@ -26,14 +26,31 @@ const EditProfilePicture = ({ profile }) => {
 
 	// Called when the user clicks "upload"
 	const doUpdateProfilePicture = async () => {
-		// BUILDOOOORS: Complete this
+		setMessage("");
+		setTxActive(true);
+		if (!fileToUpload) {
+			setMessage("Please select an image first");
+			setTxActive(false);
+			return;
+		}
+
+		try {
+			setMessage("Uploading image ...");
+			const newProfileURL = await uploadImage(fileToUpload, fileType);
+			setMessage("Linking image with profile ...");
+			await updateProfileImage(newProfileURL);
+		} catch (e) {
+			console.log("Error on update ", e);
+		}
+		setMessage("Profile image uploaded");
+		setTxActive(false);
 	};
 
 	return (
-		<div className="w-[600px] mt-10 flex flex-col  bg-primary px-1 py-1 rounded-lg mb-10">
+		<div className="w-[800px] mt-10 flex flex-col  bg-primary px-1 py-1 rounded-lg mb-10">
 			<label className="font-main block uppercase text-xs font-bold mb-2">Profile Picture</label>
 			{profile?.picture && !fileToUpload && (
-				<img width="600" src={profile.picture?.original.url} alt="profile_pic" />
+				<img width="800" src={profile.picture?.original.url} alt="profile_pic" />
 			)}
 			{fileToUpload && <img src={URL.createObjectURL(fileToUpload)} alt="profile_pic" />}
 			<div className="flex flex-row justify-start px-2 py-1 ">

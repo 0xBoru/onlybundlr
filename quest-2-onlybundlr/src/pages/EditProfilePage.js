@@ -12,7 +12,7 @@ const EditProfile = () => {
 	const { isConnected } = useAccount();
 	const { data: activeProfile, loading: activeProfileLoading } = useActiveProfile();
 	return (
-		<div className="flex flex-col w-3/6 bg-background px-5">
+		<div className="flex flex-col w-3/6 bg-orange rounded-xl px-5">
 			{!isConnected && (
 				<div className="object-center self-center mt-5">
 					<span className="flex flex-row justify-start font-logo text-2xl mb-3">Welcome to:</span>

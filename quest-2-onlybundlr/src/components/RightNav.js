@@ -17,6 +17,7 @@ const RightNav = () => {
 			"llamablackandwhite.test",
 			"llamafigurine.test",
 			"llamabasquiat.test",
+			"0xboru.test",
 		];
 		// Shuffle the order
 		for (let i = profiles.length - 1; i > 0; i--) {
@@ -28,14 +29,14 @@ const RightNav = () => {
 	}, []);
 
 	return (
-		<div className="w-3/6 h-screen sticky top-0 pt-5 bg-background px-4">
+		<div className="w-3/6 h-screen sticky top-0 pt-5 bg-yellow px-4 rounded-xl">
 			{isConnected && (
 				<>
 					<div className="flex flex-row justify-center font-logo text-6xl mb-3">
 						<SiSpringCreators /> OnlyBundlr
 					</div>
 
-					<h1 className="font-main bg-primary rounded-xl pl-1">Suggested Profiles</h1>
+					<h1 className="font-main text-newwhite bg-newblack rounded-xl pl-3">Suggested Profiles</h1>
 					<div className="flex flex-col">
 						{suggestedProfileHandles.map((suggestedProfileHandle, id) => {
 							return <SuggestedProfile key={id} handle={suggestedProfileHandle} />;

@@ -7,14 +7,18 @@ const SuggestedProfile = ({ handle }) => {
 	const [coverPicture, setCoverPicture] = useState("");
 
 	useEffect(() => {
-		// BUILDOOOORS: Complete this
+		if (profile) {
+			setProfilePicture(profile.picture?.original.url);
+			setCoverPicture(profile.coverPicture?.original.url);
+			console.log(profile);
+		}
 	}, [loading]);
 
 	return (
 		<div className="relative" key={profile?.id}>
 			{coverPicture && (
 				<img
-					className="rounded-lg absolute top-0 left-0 h-32 w-full object-cover px-1 py-1 "
+					className="rounded-xl absolute top-0 left-0 h-32 w-full object-cover px-1 py-1 "
 					src={coverPicture}
 				/>
 			)}
@@ -23,7 +27,7 @@ const SuggestedProfile = ({ handle }) => {
 				<div className="mx-2 mt-2 flex flex-row bg-secondary opacity-90 rounded-xl">
 					{profilePicture && (
 						<img
-							className="inline-block h-8 w-8 mb-1 mt-1 ml-1 rounded-full ring-2 ring-white"
+							className="inline-block h-8 w-8 mb-1 mt-1 ml-1 rounded-lg ring-2 ring-newblack"
 							src={profilePicture}
 							alt={handle}
 						/>

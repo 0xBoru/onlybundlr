@@ -6,7 +6,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 
 const LeftNav = () => {
 	return (
-		<div className="flex flex-col w-1/6 h-screen sticky top-0  bg-background">
+		<div className="flex flex-col w-1/7 h-screen sticky top-0  bg-primary rounded-lg">
 			{" "}
 			<a className="mt-5 mb-2 mx-2 self-end" href="/home">
 				<SlHome className="hover:h-12 hover:w-12 ease-in-out duration-300 h-10 w-10" />
@@ -15,7 +15,7 @@ const LeftNav = () => {
 				<SlUser className="hover:h-12 hover:w-12 ease-in-out duration-300 h-10 w-10" />
 			</a>
 			<a className="my-2 mx-2 self-end" href="/create-publication">
-				<AiOutlinePlus className="hover:h-12 hover:w-12 ease-in-out duration-300 h-10 w-10 rounded-full ring-2 bg-primary hover:bg-secondary" />
+				<AiOutlinePlus className="hover:h-12 hover:w-12 ease-in-out duration-300 h-10 w-10 rounded-full ring-2 bg-primary hover:bg-orange" />
 			</a>
 		</div>
 	);

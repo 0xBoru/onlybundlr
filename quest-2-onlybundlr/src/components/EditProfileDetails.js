@@ -9,6 +9,7 @@ import {
 	useCurrencies,
 	FollowPolicyType,
 } from "@lens-protocol/react";
+import { recoverAddress } from "ethers/lib/utils.js";
 
 const EditProfileDetails = ({ profile }) => {
 	const [message, setMessage] = useState("");
@@ -68,28 +69,73 @@ const EditProfileDetails = ({ profile }) => {
 
 	// Called when the user clicks "save"
 	const doUpdateProfile = async () => {
-		// BUILDOOOORS: Complete this
+		setMessage("");
+		setTxActive(true);
+
+		setMessage("Updating profile information ...");
+
+		let coverPicture = "";
+		if (fileToUpload) {
+			setMessage("Uploading cover picture ...");
+			coverPicture = await uploadImage(fileToUpload, fileType);
+		} else {
+			coverPicture = profile.coverPicture?.original.url || null;
+		}
+		const attributes = {
+			location: "",
+			website: "",
+		};
+		setMessage("Uploading profile information ...");
+
+		await update({ name, bio, coverPicture, attributes });
+		setMessage("Profile updated");
+		setTxActive(false);
+
+		// only set the fee if a number greater than 0 is supplied
+		if (followFee && followFee > 0) {
+			await doUploadFollowPolicy();
+		}
 	};
 
 	// Sets up the follow policy object
 	function resolveFollowPolicy({ followPolicyType, amount, recipient }) {
-		// BUILDOOOORS: Complete this
+		if (followPolicyType === FollowPolicyType.CHARGE) {
+			return {
+				type: FollowPolicyType.CHARGE,
+				amount: amount,
+				recipient: recipient,
+			};
+		}
+
+		return {
+			type: FollowPolicyType[followPolicyType],
+		};
 	}
 
 	// Sets the fee to follow a profile
 	const doUploadFollowPolicy = async () => {
-		// BUILDOOOORS: Complete this
+		const recipient = profile.ownedBy;
+
+		const erc20 = currencies.find((c) => c.symbol === chargeCurrency);
+		const fee = Amount.erc20(erc20, followFee);
+		await updateFollowPolicy({
+			followPolicy: resolveFollowPolicy({
+				amount: fee,
+				followPolicyType: FollowPolicyType.CHARGE,
+				recipient,
+			}),
+		});
 	};
 
 	return (
-		<div className="w-[600px] mt-2 flex flex-col bg-primary px-1 py-1 rounded-lg">
+		<div className="w-[800px] mt-2 flex flex-col bg-newblack px-1 py-1 rounded-lg">
 			<div className="ml-2">
-				<label className="font-main block uppercase text-xs font-bold mb-2">Personal Information</label>
-				<label className="font-main block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+				<label className="font-main block uppercase text-xs text-background font-bold mb-2">Personal Information</label>
+				<label className="font-main block uppercase tracking-wide text-background text-xs font-bold mb-2">
 					Name
 				</label>
 				<input
-					className="appearance-none block bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+					className="appearance-none font-main block bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
 					id="name"
 					type="text"
 					size="50"
@@ -98,11 +144,11 @@ const EditProfileDetails = ({ profile }) => {
 				/>
 			</div>
 			<div className="w-full ml-2">
-				<label className="font-main block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+				<label className="font-main block uppercase tracking-wide text-background text-xs font-bold mb-2">
 					Bio
 				</label>
 				<textarea
-					className="appearance-none block bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+					className="appearance-none font-main block bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
 					id="bio"
 					type="text"
 					value={bio || ""}
@@ -113,7 +159,7 @@ const EditProfileDetails = ({ profile }) => {
 			</div>
 
 			<div className="w-full ml-2 mt-5">
-				<label className="font-main block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+				<label className="font-main block uppercase tracking-wide text-background text-xs font-bold mb-2">
 					Subscription Fee
 				</label>
 				<div className="flex flex-row">
@@ -150,7 +196,7 @@ const EditProfileDetails = ({ profile }) => {
 			<div className="w-full mt-10 flex flex-col  bg-primary px-1 py-1 rounded-lg">
 				<label className="font-main block uppercase text-xs font-bold mb-2">Cover Picture</label>
 				{profile?.coverPicture && !fileToUpload && (
-					<img width="600" src={profile.coverPicture?.original?.url} alt="profile_pic" />
+					<img width="800" src={profile.coverPicture?.original?.url} alt="profile_pic" />
 				)}
 				{fileToUpload && <img src={URL.createObjectURL(fileToUpload)} alt="profile_pic" />}
 				<div className="flex flex-row justify-start px-2 py-1 ">
@@ -163,11 +209,11 @@ const EditProfileDetails = ({ profile }) => {
 					/>
 				</div>
 			</div>
-			<div className="flex flex-row justify-end w-full bg-primary px-2 py-1 mt-1">
+			<div className="flex flex-row justify-end w-full bg-primary px-2 py-1 mt-1 rounded-lg">
 				<span className="font-main text-message mr-5">{message}</span>
 
 				<button
-					className="font-main px-5 text-white rounded-lg bg-background enabled:hover:bg-secondary border border-red-500"
+					className="font-main px-5 text-white rounded-lg bg-background enabled:hover:bg-orange border border-red-500"
 					disabled={txActive}
 					onClick={doUpdateProfile}
 				>

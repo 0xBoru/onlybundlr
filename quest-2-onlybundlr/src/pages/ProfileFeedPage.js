@@ -44,16 +44,16 @@ const ProfileFeedPage = () => {
 	}, [profile]);
 
 	return (
-		<div className="w-3/6 bg-background">
+		<div className="w-3/6 bg-orange">
 			<div className="top-0 relative bg-primary border border-2 border-secondary px-2 h-62 mt-5 w-fit rounded-xl">
 				<h1 className="font-main">{profile?.handle}</h1>
 				<p className="font-main text-sm">
 					{profile?.stats.totalPublications} Posts * {profile?.stats.totalCollects} Likes *{" "}
 					{profile?.stats.totalFollowers} Followers
 				</p>
-				<img className="z-0 h-32 object-cover" width="600" src={coverPicture} alt="header" />
+				<img className="z-0 h-32 object-cover" width="800" src={coverPicture} alt="header" />
 				<img
-					className="absolute top-40 z-10 h-15 w-12 rounded-full border-2 border-white "
+					className="absolute top-40 z-10 h-15 w-12 rounded-lg border-2 border-white "
 					src={profilePicture}
 					alt={currentHandle}
 				/>
@@ -70,10 +70,10 @@ const ProfileFeedPage = () => {
 					</div>
 				)}
 				{profile?.id === activeProfile?.id && (
-					<h1 className="font-main text-sm mt-2 bg-secondary px-2 py-2 mb-1 ml-10">{profile?.bio}</h1>
+					<h1 className="font-main text-sm mt-2 bg-secondary px-2 py-2 mb-1 ml-10 rounded-lg">{profile?.bio}</h1>
 				)}
 				{profile?.id !== activeProfile?.id && (
-					<h1 className="font-main text-sm mt-2 bg-secondary px-2 py-2 mb-1">{profile?.bio}</h1>
+					<h1 className="font-main text-sm text-main mt-2 bg-orange px-2 py-2 mb-1 rounded-lg">{profile?.bio}</h1>
 				)}
 			</div>
 			{!profileLoading && (profile.followStatus?.isFollowedByMe || profile?.id === activeProfile?.id) && (
