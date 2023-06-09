@@ -17,6 +17,7 @@ module.exports = {
 			newblack: "#000000",
 			contast: "#403F3E",
 			message: "#f50505",
+			default: "FEF4EE",
 		},
 		extend: {},
 	},
